@@ -3,6 +3,7 @@ use z3::ast::Ast;
 use z3::{ast, Config, Context, Optimize, Solver};
 
 fn main() {
+    prover();
     chehov_tutor();
     sum_of_non_zero_4_times_product();
     subset_sum();
@@ -10,6 +11,32 @@ fn main() {
     wood_workshop();
     xkcd287();
     toy();
+}
+
+fn prover() {
+    let cfg = Config::new();
+    let ctx = Context::new(&cfg);
+
+    let x = ast::BV::new_const(&ctx, "x", 64);
+    let y = ast::BV::new_const(&ctx, "y", 64);
+    let minus_two = ast::BV::from_i64(&ctx, -2, 64);
+    let output = ast::BV::new_const(&ctx, "output", 64);
+
+    let a1 = (&x ^ &y)._eq(&output);
+    let a2 = (((&x & &y) * &minus_two) + (&y + &x))._eq(&output).not();
+
+    let solver = Solver::new(&ctx);
+    solver.assert(&a1);
+    solver.assert(&a2);
+    let result = solver.check();
+    match solver.get_model() {
+        Some(m) => {
+            println!("Result: {result:?}");
+            println!("Model:");
+            println!("{m}");
+        }
+        None => println!("Result: {result:?}"),
+    };
 }
 
 fn chehov_tutor() {
