@@ -34,6 +34,35 @@ fn main() {
     fred_puzzle();
     multiple_choice_logic_puzzle();
     feed_kids_puzzle();
+    popsicles();
+}
+
+fn popsicles() {
+    println!("--- {} ---", function!());
+    let cfg = Config::new();
+    let ctx = Context::new(&cfg);
+
+    let box1pop = ast::Int::new_const(&ctx, "1 popsicle");
+    let box3pop = ast::Int::new_const(&ctx, "3 popsicles");
+    let box5pop = ast::Int::new_const(&ctx, "5 popsicles");
+    let pop_total = ast::Int::new_const(&ctx, "Total popsicles");
+    let cost_total = ast::Int::new_const(&ctx, "Cost total");
+
+    let solver = Optimize::new(&ctx);
+    solver.assert(&(&box1pop * 1u64 + &box3pop * 3u64 + &box5pop * 5u64)._eq(&pop_total));
+    solver.assert(&(&box1pop * 1u64 + &box3pop * 2u64 + &box5pop * 3u64)._eq(&cost_total));
+    solver.assert(&cost_total._eq(&ast::Int::from_i64(&ctx, 8)));
+    solver.assert(&box1pop.ge(&ast::Int::from_i64(&ctx, 0)));
+    solver.assert(&box3pop.ge(&ast::Int::from_i64(&ctx, 0)));
+    solver.assert(&box5pop.ge(&ast::Int::from_i64(&ctx, 0)));
+    solver.maximize(&pop_total);
+
+    let result = solver.check(&[]);
+    println!("Result: {result:?}");
+    if let Some(m) = solver.get_model() {
+        println!("Model:");
+        println!("{m}");
+    };
 }
 
 fn feed_kids_puzzle() {
