@@ -2,7 +2,7 @@ use comfy_table::presets::UTF8_HORIZONTAL_ONLY;
 use comfy_table::{Attribute, Cell, ContentArrangement, Table};
 use itertools::Itertools;
 use z3::ast::Ast;
-use z3::{ast, Config, Context, Model, Optimize, Solver};
+use z3::{ast, Config, Context, Model, Optimize, SatResult, Solver};
 
 macro_rules! function {
     () => {{
@@ -33,6 +33,116 @@ fn main() {
     zebra_puzzle();
     fred_puzzle();
     multiple_choice_logic_puzzle();
+    feed_kids_puzzle();
+}
+
+fn feed_kids_puzzle() {
+    println!("--- {} ---", function!());
+    let cfg = Config::new();
+    let ctx = Context::new(&cfg);
+
+    let erica = ast::Int::new_const(&ctx, "Erica");
+    let frank = ast::Int::new_const(&ctx, "Frank");
+    let greg = ast::Int::new_const(&ctx, "Greg");
+    let hank = ast::Int::new_const(&ctx, "Hank");
+
+    let apple = ast::Int::from_i64(&ctx, 1);
+    let banana = ast::Int::from_i64(&ctx, 2);
+    let cherry = ast::Int::from_i64(&ctx, 3);
+    let date = ast::Int::from_i64(&ctx, 4);
+
+    let solver = Solver::new(&ctx);
+    solver.assert(&ast::Ast::distinct(&ctx, &[&erica, &frank, &greg, &hank]));
+
+    let params = vec![
+        &erica, &frank, &greg, &hank, &apple, &banana, &cherry, &date,
+    ];
+
+    for p in &params {
+        solver.assert(&ast::Bool::and(
+            &ctx,
+            &[
+                &p.ge(&ast::Int::from_i64(&ctx, 1)),
+                &p.le(&ast::Int::from_i64(&ctx, 4)),
+            ],
+        ));
+    }
+
+    solver.assert(&ast::Bool::or(
+        &ctx,
+        &[&erica._eq(&cherry), &erica._eq(&date)],
+    ));
+    solver.assert(&ast::Bool::or(
+        &ctx,
+        &[&frank._eq(&cherry), &frank._eq(&apple)],
+    ));
+    solver.assert(&ast::Bool::or(
+        &ctx,
+        &[&greg._eq(&cherry), &greg._eq(&banana)],
+    ));
+    solver.assert(&ast::Bool::or(
+        &ctx,
+        &[&hank._eq(&apple), &hank._eq(&banana), &hank._eq(&date)],
+    ));
+
+    let read_param = |m: &Model<'_>, param: &ast::Int<'_>| -> (String, i64) {
+        let name = param.to_string();
+        let value = m.eval(param, true).unwrap().as_i64().unwrap();
+        (name, value)
+    };
+
+    while solver.check() == SatResult::Sat {
+        if let Some(m) = solver.get_model() {
+            let mut modifications = Vec::new();
+            m.iter().for_each(|fd| {
+                modifications.push(
+                    fd.apply(&[])
+                        ._eq(&m.get_const_interp(&fd.apply(&[])).unwrap())
+                        .not(),
+                );
+            });
+            solver.assert(&ast::Bool::or(
+                &ctx,
+                &modifications.iter().collect::<Vec<_>>(),
+            ));
+
+            let groupped = params
+                .iter()
+                .map(|p| read_param(&m, p))
+                .into_group_map_by(|(_, v)| *v);
+
+            let mut table = Table::new();
+            table
+                .load_preset(UTF8_HORIZONTAL_ONLY)
+                .set_content_arrangement(ContentArrangement::Dynamic)
+                .set_width(120)
+                .set_header(vec![
+                    Cell::new("apple").add_attribute(Attribute::Bold),
+                    Cell::new("banana").add_attribute(Attribute::Bold),
+                    Cell::new("cherry").add_attribute(Attribute::Bold),
+                    Cell::new("date").add_attribute(Attribute::Bold),
+                ]);
+            let first_col = &groupped[&1];
+            let second_col = &groupped[&2];
+            let third_col = &groupped[&3];
+            let fourth_col = &groupped[&4];
+
+            for n in 0usize..1 {
+                let (s1, _) = &first_col[n];
+                let (s2, _) = &second_col[n];
+                let (s3, _) = &third_col[n];
+                let (s4, _) = &fourth_col[n];
+
+                table.add_row(vec![
+                    Cell::new(s1),
+                    Cell::new(s2),
+                    Cell::new(s3),
+                    Cell::new(s4),
+                ]);
+            }
+            println!("{table}");
+        }
+    }
 }
 
 fn multiple_choice_logic_puzzle() {
