@@ -32,6 +32,40 @@ fn main() {
     toy();
     zebra_puzzle();
     fred_puzzle();
+    multiple_choice_logic_puzzle();
+}
+
+fn multiple_choice_logic_puzzle() {
+    println!("--- {} ---", function!());
+    let cfg = Config::new();
+    let ctx = Context::new(&cfg);
+    let problem = r#"
+(declare-fun a () Bool)
+(declare-fun b () Bool)
+(declare-fun c () Bool)
+(declare-fun d () Bool)
+(declare-fun e () Bool)
+(declare-fun f () Bool)
+    
+( assert (= a (and b c d e f)))
+( assert (= b (and (not c) (not d) (not e) (not f))))
+( assert (= c (and a b)))
+( assert (= d (or
+    (and a (not b) (not c))
+    (and (not a) b (not c))
+    (and (not a) (not b) c)
+    )))
+( assert (= e (and (not a) (not b) (not c) (not d))))
+( assert (= f (and (not a) (not b) (not c) (not d) (not e))))
+"#;
+    let solver = Solver::new(&ctx);
+    solver.from_string(problem);
+    let result = solver.check();
+    println!("Result: {result:?}");
+    if let Some(m) = solver.get_model() {
+        println!("Model:");
+        println!("{m}");
+    };
 }
 
 fn fred_puzzle() {
