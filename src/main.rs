@@ -37,6 +37,7 @@ fn zebra_puzzle() {
     println!("--- {} ---", function!());
     let cfg = Config::new();
     let ctx = Context::new(&cfg);
+
     let yellow = ast::Int::new_const(&ctx, "yellow");
     let blue = ast::Int::new_const(&ctx, "blue");
     let red = ast::Int::new_const(&ctx, "red");
@@ -44,7 +45,7 @@ fn zebra_puzzle() {
     let green = ast::Int::new_const(&ctx, "green");
 
     let norwegian = ast::Int::new_const(&ctx, "norwegian");
-    let russian = ast::Int::new_const(&ctx, "russian");
+    let ukrainian = ast::Int::new_const(&ctx, "ukrainian");
     let englishman = ast::Int::new_const(&ctx, "englishman");
     let spaniard = ast::Int::new_const(&ctx, "spaniard");
     let japanese = ast::Int::new_const(&ctx, "japanese");
@@ -67,6 +68,34 @@ fn zebra_puzzle() {
     let dog = ast::Int::new_const(&ctx, "dog");
     let zebra = ast::Int::new_const(&ctx, "zebra");
 
+    let params = vec![
+        &norwegian,
+        &ukrainian,
+        &spaniard,
+        &englishman,
+        &japanese,
+        &red,
+        &blue,
+        &ivory,
+        &green,
+        &yellow,
+        &water,
+        &milk,
+        &tea,
+        &orange_juice,
+        &coffee,
+        &kools,
+        &chesterfield,
+        &lucky_strike,
+        &old_gold,
+        &parliament,
+        &fox,
+        &horse,
+        &snails,
+        &dog,
+        &zebra,
+    ];
+
     let solver = Solver::new(&ctx);
     solver.assert(&ast::Ast::distinct(
         &ctx,
@@ -74,7 +103,7 @@ fn zebra_puzzle() {
     ));
     solver.assert(&ast::Ast::distinct(
         &ctx,
-        &[&norwegian, &russian, &englishman, &spaniard, &japanese],
+        &[&norwegian, &ukrainian, &englishman, &spaniard, &japanese],
     ));
     solver.assert(&ast::Ast::distinct(
         &ctx,
@@ -88,65 +117,21 @@ fn zebra_puzzle() {
         &ctx,
         &[&fox, &horse, &snails, &dog, &zebra],
     ));
-    solver.assert(&(yellow.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(yellow.le(&ast::Int::from_i64(&ctx, 5))));
-    solver.assert(&(blue.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(blue.le(&ast::Int::from_i64(&ctx, 5))));
-    solver.assert(&(red.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(red.le(&ast::Int::from_i64(&ctx, 5))));
-    solver.assert(&(ivory.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(ivory.le(&ast::Int::from_i64(&ctx, 5))));
-    solver.assert(&(green.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(green.le(&ast::Int::from_i64(&ctx, 5))));
 
-    solver.assert(&(norwegian.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(norwegian.le(&ast::Int::from_i64(&ctx, 5))));
-    solver.assert(&(russian.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(russian.le(&ast::Int::from_i64(&ctx, 5))));
-    solver.assert(&(englishman.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(englishman.le(&ast::Int::from_i64(&ctx, 5))));
-    solver.assert(&(spaniard.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(spaniard.le(&ast::Int::from_i64(&ctx, 5))));
-    solver.assert(&(japanese.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(japanese.le(&ast::Int::from_i64(&ctx, 5))));
-
-    solver.assert(&(water.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(water.le(&ast::Int::from_i64(&ctx, 5))));
-    solver.assert(&(milk.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(milk.le(&ast::Int::from_i64(&ctx, 5))));
-    solver.assert(&(tea.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(tea.le(&ast::Int::from_i64(&ctx, 5))));
-    solver.assert(&(orange_juice.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(orange_juice.le(&ast::Int::from_i64(&ctx, 5))));
-    solver.assert(&(coffee.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(coffee.le(&ast::Int::from_i64(&ctx, 5))));
-
-    solver.assert(&(kools.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(kools.le(&ast::Int::from_i64(&ctx, 5))));
-    solver.assert(&(old_gold.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(old_gold.le(&ast::Int::from_i64(&ctx, 5))));
-    solver.assert(&(chesterfield.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(chesterfield.le(&ast::Int::from_i64(&ctx, 5))));
-    solver.assert(&(parliament.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(parliament.le(&ast::Int::from_i64(&ctx, 5))));
-    solver.assert(&(lucky_strike.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(lucky_strike.le(&ast::Int::from_i64(&ctx, 5))));
-
-    solver.assert(&(fox.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(fox.le(&ast::Int::from_i64(&ctx, 5))));
-    solver.assert(&(horse.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(horse.le(&ast::Int::from_i64(&ctx, 5))));
-    solver.assert(&(dog.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(dog.le(&ast::Int::from_i64(&ctx, 5))));
-    solver.assert(&(snails.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(snails.le(&ast::Int::from_i64(&ctx, 5))));
-    solver.assert(&(zebra.ge(&ast::Int::from_i64(&ctx, 1))));
-    solver.assert(&(zebra.le(&ast::Int::from_i64(&ctx, 5))));
+    for p in &params {
+        solver.assert(&ast::Bool::and(
+            &ctx,
+            &[
+                &p.ge(&ast::Int::from_i64(&ctx, 1)),
+                &p.le(&ast::Int::from_i64(&ctx, 5)),
+            ],
+        ));
+    }
 
     solver.assert(&englishman._eq(&red));
     solver.assert(&spaniard._eq(&dog));
     solver.assert(&coffee._eq(&green));
-    solver.assert(&russian._eq(&tea));
+    solver.assert(&ukrainian._eq(&tea));
     solver.assert(&green._eq(&(&ivory + 1i64)));
     solver.assert(&old_gold._eq(&snails));
     solver.assert(&kools._eq(&yellow));
@@ -184,34 +169,6 @@ fn zebra_puzzle() {
         let value = m.eval(param, true).unwrap().as_i64().unwrap();
         (name, value)
     };
-
-    let params = vec![
-        &norwegian,
-        &russian,
-        &spaniard,
-        &englishman,
-        &japanese,
-        &red,
-        &blue,
-        &ivory,
-        &green,
-        &yellow,
-        &water,
-        &milk,
-        &tea,
-        &orange_juice,
-        &coffee,
-        &kools,
-        &chesterfield,
-        &lucky_strike,
-        &old_gold,
-        &parliament,
-        &fox,
-        &horse,
-        &snails,
-        &dog,
-        &zebra,
-    ];
 
     if let Some(m) = solver.get_model() {
         let groupped = params
