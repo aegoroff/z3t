@@ -97,14 +97,11 @@ fn sum_of_non_zero_4_times_product() {
     solver.assert(&a3);
 
     let result = solver.check();
-    match solver.get_model() {
-        Some(m) => {
-            println!("Result: {result:?}");
-            let answer = m.eval(&(&one / &x + &one / &y), true);
-            println!("Model: {m} answer: {answer:?}");
-            println!();
-        }
-        None => println!("Result: {result:?}"),
+    println!("Result: {result:?}\n----");
+    if let Some(m) = solver.get_model() {
+        let answer = m.eval(&(&one / &x + &one / &y), true);
+        println!("Model: {m} answer: {answer:?}");
+        println!();
     };
 }
 
@@ -134,23 +131,20 @@ fn subset_sum() {
     solver.assert(&sum_vars.ge(&ast::Int::from_i64(&ctx, 1)));
 
     let result = solver.check();
-    match solver.get_model() {
-        Some(m) => {
-            println!("Result: {result:?}");
-            println!("Model:");
-            println!("{m}");
-            let mut subset = vec![];
-            for (ix, v) in vars.iter().enumerate() {
-                let r = m.eval(v, true).unwrap().as_i64().unwrap();
-                if r == 1 {
-                    subset.push(set[ix])
-                }
+    println!("Result: {result:?}\n----");
+    if let Some(m) = solver.get_model() {
+        println!("Model:");
+        println!("{m}");
+        let mut subset = vec![];
+        for (ix, v) in vars.iter().enumerate() {
+            let r = m.eval(v, true).unwrap().as_i64().unwrap();
+            if r == 1 {
+                subset.push(set[ix])
             }
-            println!("set: {set:?}");
-            println!("subset: {subset:?}");
-            println!();
         }
-        None => println!("Result: {result:?}"),
+        println!("set: {set:?}");
+        println!("subset: {subset:?}");
+        println!();
     };
 }
 
