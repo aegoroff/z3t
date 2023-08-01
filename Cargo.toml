@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 z3 = {version="0.12.1", features = ["static-link-z3"]}
 itertools = "0.11.0"
+comfy-table = "7.0.1"

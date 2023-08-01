@@ -1,6 +1,8 @@
+use comfy_table::presets::UTF8_HORIZONTAL_ONLY;
+use comfy_table::{Attribute, Cell, ContentArrangement, Table};
 use itertools::Itertools;
 use z3::ast::Ast;
-use z3::{ast, Config, Context, Optimize, Solver};
+use z3::{ast, Config, Context, Model, Optimize, Solver};
 
 macro_rules! function {
     () => {{
@@ -176,9 +178,81 @@ fn zebra_puzzle() {
 
     let result = solver.check();
     println!("Result: {result:?}");
+
+    let read_param = |m: &Model<'_>, param: &ast::Int<'_>| -> (String, i64) {
+        let name = param.to_string();
+        let value = m.eval(param, true).unwrap().as_i64().unwrap();
+        (name, value)
+    };
+
+    let params = vec![
+        &norwegian,
+        &russian,
+        &spaniard,
+        &englishman,
+        &japanese,
+        &red,
+        &blue,
+        &ivory,
+        &green,
+        &yellow,
+        &water,
+        &milk,
+        &tea,
+        &orange_juice,
+        &coffee,
+        &kools,
+        &chesterfield,
+        &lucky_strike,
+        &old_gold,
+        &parliament,
+        &fox,
+        &horse,
+        &snails,
+        &dog,
+        &zebra,
+    ];
+
     if let Some(m) = solver.get_model() {
-        println!("Model:");
-        println!("{m}");
+        let groupped = params
+            .into_iter()
+            .map(|p| read_param(&m, p))
+            .into_group_map_by(|(_, v)| *v);
+
+        let mut table = Table::new();
+        table
+            .load_preset(UTF8_HORIZONTAL_ONLY)
+            .set_content_arrangement(ContentArrangement::Dynamic)
+            .set_width(120)
+            .set_header(vec![
+                Cell::new("1").add_attribute(Attribute::Bold),
+                Cell::new("2").add_attribute(Attribute::Bold),
+                Cell::new("3").add_attribute(Attribute::Bold),
+                Cell::new("4").add_attribute(Attribute::Bold),
+                Cell::new("5").add_attribute(Attribute::Bold),
+            ]);
+        let first_col = &groupped[&1];
+        let second_col = &groupped[&2];
+        let third_col = &groupped[&3];
+        let fourth_col = &groupped[&4];
+        let fifth_col = &groupped[&5];
+
+        for n in 0usize..5 {
+            let (s1, _) = &first_col[n];
+            let (s2, _) = &second_col[n];
+            let (s3, _) = &third_col[n];
+            let (s4, _) = &fourth_col[n];
+            let (s5, _) = &fifth_col[n];
+
+            table.add_row(vec![
+                Cell::new(s1),
+                Cell::new(s2),
+                Cell::new(s3),
+                Cell::new(s4),
+                Cell::new(s5),
+            ]);
+        }
+        println!("{table}");
     };
 }
 
