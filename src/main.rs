@@ -3,6 +3,7 @@ use z3::ast::Ast;
 use z3::{ast, Config, Context, Optimize, Solver};
 
 fn main() {
+    with_forall();
     prover();
     chehov_tutor();
     sum_of_non_zero_4_times_product();
@@ -11,6 +12,24 @@ fn main() {
     wood_workshop();
     xkcd287();
     toy();
+}
+
+fn with_forall() {
+    let cfg = Config::new();
+    let ctx = Context::new(&cfg);
+
+    let x = ast::BV::new_const(&ctx, "x", 64);
+    let y = ast::BV::new_const(&ctx, "y", 64);
+    let one = ast::BV::from_i64(&ctx, 1, 64);
+
+    let a1 = ((&x + &y) - ((&x & &y).bvshl(&one)))._eq(&(&x ^ &y));
+
+    let a1 = ast::forall_const(&ctx, &[&x, &y], &[], &a1);
+
+    let solver = Solver::new(&ctx);
+    solver.assert(&a1);
+    let result = solver.check();
+    println!("Result: {result:?}\n----");
 }
 
 fn prover() {
@@ -29,13 +48,10 @@ fn prover() {
     solver.assert(&a1);
     solver.assert(&a2);
     let result = solver.check();
-    match solver.get_model() {
-        Some(m) => {
-            println!("Result: {result:?}");
-            println!("Model:");
-            println!("{m}");
-        }
-        None => println!("Result: {result:?}"),
+    println!("Result: {result:?}\n----");
+    if let Some(m) = solver.get_model() {
+        println!("Model:");
+        println!("{m}");
     };
 }
 
@@ -54,13 +70,10 @@ fn chehov_tutor() {
     solver.assert(&a2);
 
     let result = solver.check();
-    match solver.get_model() {
-        Some(m) => {
-            println!("Result: {result:?}");
-            println!("Model:");
-            println!("{m}");
-        }
-        None => println!("Result: {result:?}"),
+    println!("Result: {result:?}\n----");
+    if let Some(m) = solver.get_model() {
+        println!("Model:");
+        println!("{m}");
     };
 }
 
@@ -159,13 +172,10 @@ fn animals() {
     solver.assert(&a3);
 
     let result = solver.check();
-    match solver.get_model() {
-        Some(m) => {
-            println!("Result: {result:?}");
-            println!("Model:");
-            println!("{m}");
-        }
-        None => println!("Result: {result:?}"),
+    println!("Result: {result:?}\n----");
+    if let Some(m) = solver.get_model() {
+        println!("Model:");
+        println!("{m}");
     };
 }
 
@@ -205,13 +215,10 @@ fn wood_workshop() {
 
     let result = solver.check(&[]);
 
-    match solver.get_model() {
-        Some(m) => {
-            println!("Result: {result:?}");
-            println!("Model:");
-            println!("{m}");
-        }
-        None => println!("Result: {result:?}"),
+    println!("Result: {result:?}\n----");
+    if let Some(m) = solver.get_model() {
+        println!("Model:");
+        println!("{m}");
     };
 }
 
@@ -247,13 +254,10 @@ fn xkcd287() {
 
     let result = solver.check();
 
-    match solver.get_model() {
-        Some(m) => {
-            println!("Result: {result:?}");
-            println!("Model:");
-            println!("{m}");
-        }
-        None => println!("Result: {result:?}"),
+    println!("Result: {result:?}\n----");
+    if let Some(m) = solver.get_model() {
+        println!("Model:");
+        println!("{m}");
     };
 }
 
@@ -277,12 +281,9 @@ fn toy() {
     solver.assert(&a3);
 
     let result = solver.check();
-    match solver.get_model() {
-        Some(m) => {
-            println!("Result: {result:?}");
-            println!("Model:");
-            println!("{m}");
-        }
-        None => println!("Result: {result:?}"),
+    println!("Result: {result:?}\n----");
+    if let Some(m) = solver.get_model() {
+        println!("Model:");
+        println!("{m}");
     };
 }
