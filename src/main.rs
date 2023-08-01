@@ -21,7 +21,6 @@ macro_rules! function {
 }
 
 fn main() {
-    zebra_puzzle();
     with_forall();
     prover();
     chehov_tutor();
@@ -31,6 +30,40 @@ fn main() {
     wood_workshop();
     xkcd287();
     toy();
+    zebra_puzzle();
+    fred_puzzle();
+}
+
+fn fred_puzzle() {
+    println!("--- {} ---", function!());
+    let cfg = Config::new();
+    let ctx = Context::new(&cfg);
+
+    let ei = ast::Bool::new_const(&ctx, "Ed Innocent");
+    let fi = ast::Bool::new_const(&ctx, "Fred Innocent");
+    let ti = ast::Bool::new_const(&ctx, "Ted Innocent");
+    let eg = ast::Bool::new_const(&ctx, "Ed Guilty");
+    let fg = ast::Bool::new_const(&ctx, "Fred Guilty");
+    let tg = ast::Bool::new_const(&ctx, "Ted Guilty");
+
+    let solver = Solver::new(&ctx);
+    solver.assert(&ei._eq(&eg).not());
+    solver.assert(&fi._eq(&fg).not());
+    solver.assert(&ti._eq(&tg).not());
+
+    solver.assert(&ei._eq(&ast::Bool::and(&ctx, &[&fg, &ti])));
+    solver.assert(&fi._eq(&eg.implies(&tg)));
+    solver.assert(&ti._eq(&ast::Bool::and(
+        &ctx,
+        &[&ti, &ast::Bool::or(&ctx, &[&fg, &eg])],
+    )));
+
+    let result = solver.check();
+    println!("Result: {result:?}");
+    if let Some(m) = solver.get_model() {
+        println!("Model:");
+        println!("{m}");
+    };
 }
 
 fn zebra_puzzle() {
