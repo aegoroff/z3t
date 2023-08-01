@@ -2,6 +2,22 @@ use itertools::Itertools;
 use z3::ast::Ast;
 use z3::{ast, Config, Context, Optimize, Solver};
 
+macro_rules! function {
+    () => {{
+        fn f() {}
+        fn type_name_of<T>(_: T) -> &'static str {
+            std::any::type_name::<T>()
+        }
+        let name = type_name_of(f);
+
+        // Find and cut the rest of the path
+        match &name[..name.len() - 3].rfind(':') {
+            Some(pos) => &name[pos + 1..name.len() - 3],
+            None => &name[..name.len() - 3],
+        }
+    }};
+}
+
 fn main() {
     with_forall();
     prover();
@@ -15,6 +31,7 @@ fn main() {
 }
 
 fn with_forall() {
+    println!("--- {} ---", function!());
     let cfg = Config::new();
     let ctx = Context::new(&cfg);
 
@@ -29,10 +46,11 @@ fn with_forall() {
     let solver = Solver::new(&ctx);
     solver.assert(&a1);
     let result = solver.check();
-    println!("Result: {result:?}\n----");
+    println!("Result: {result:?}");
 }
 
 fn prover() {
+    println!("--- {} ---", function!());
     let cfg = Config::new();
     let ctx = Context::new(&cfg);
 
@@ -48,7 +66,7 @@ fn prover() {
     solver.assert(&a1);
     solver.assert(&a2);
     let result = solver.check();
-    println!("Result: {result:?}\n----");
+    println!("Result: {result:?}");
     if let Some(m) = solver.get_model() {
         println!("Model:");
         println!("{m}");
@@ -56,6 +74,7 @@ fn prover() {
 }
 
 fn chehov_tutor() {
+    println!("--- {} ---", function!());
     let cfg = Config::new();
     let ctx = Context::new(&cfg);
 
@@ -70,7 +89,7 @@ fn chehov_tutor() {
     solver.assert(&a2);
 
     let result = solver.check();
-    println!("Result: {result:?}\n----");
+    println!("Result: {result:?}");
     if let Some(m) = solver.get_model() {
         println!("Model:");
         println!("{m}");
@@ -78,6 +97,7 @@ fn chehov_tutor() {
 }
 
 fn sum_of_non_zero_4_times_product() {
+    println!("--- {} ---", function!());
     let cfg = Config::new();
     let ctx = Context::new(&cfg);
 
@@ -97,7 +117,7 @@ fn sum_of_non_zero_4_times_product() {
     solver.assert(&a3);
 
     let result = solver.check();
-    println!("Result: {result:?}\n----");
+    println!("Result: {result:?}");
     if let Some(m) = solver.get_model() {
         let answer = m.eval(&(&one / &x + &one / &y), true);
         println!("Model: {m} answer: {answer:?}");
@@ -106,6 +126,7 @@ fn sum_of_non_zero_4_times_product() {
 }
 
 fn subset_sum() {
+    println!("--- {} ---", function!());
     let cfg = Config::new();
     let ctx = Context::new(&cfg);
     let set = vec![-7i64, -3, -2, 5, 8];
@@ -131,7 +152,7 @@ fn subset_sum() {
     solver.assert(&sum_vars.ge(&ast::Int::from_i64(&ctx, 1)));
 
     let result = solver.check();
-    println!("Result: {result:?}\n----");
+    println!("Result: {result:?}");
     if let Some(m) = solver.get_model() {
         println!("Model:");
         println!("{m}");
@@ -149,6 +170,7 @@ fn subset_sum() {
 }
 
 fn animals() {
+    println!("--- {} ---", function!());
     let cfg = Config::new();
     let ctx = Context::new(&cfg);
 
@@ -166,7 +188,7 @@ fn animals() {
     solver.assert(&a3);
 
     let result = solver.check();
-    println!("Result: {result:?}\n----");
+    println!("Result: {result:?}");
     if let Some(m) = solver.get_model() {
         println!("Model:");
         println!("{m}");
@@ -174,6 +196,7 @@ fn animals() {
 }
 
 fn wood_workshop() {
+    println!("--- {} ---", function!());
     let cfg = Config::new();
     let ctx = Context::new(&cfg);
 
@@ -209,7 +232,7 @@ fn wood_workshop() {
 
     let result = solver.check(&[]);
 
-    println!("Result: {result:?}\n----");
+    println!("Result: {result:?}");
     if let Some(m) = solver.get_model() {
         println!("Model:");
         println!("{m}");
@@ -217,6 +240,7 @@ fn wood_workshop() {
 }
 
 fn xkcd287() {
+    println!("--- {} ---", function!());
     let cfg = Config::new();
     let ctx = Context::new(&cfg);
 
@@ -248,7 +272,7 @@ fn xkcd287() {
 
     let result = solver.check();
 
-    println!("Result: {result:?}\n----");
+    println!("Result: {result:?}");
     if let Some(m) = solver.get_model() {
         println!("Model:");
         println!("{m}");
@@ -256,6 +280,7 @@ fn xkcd287() {
 }
 
 fn toy() {
+    println!("--- {} ---", function!());
     let cfg = Config::new();
     let ctx = Context::new(&cfg);
 
@@ -275,7 +300,7 @@ fn toy() {
     solver.assert(&a3);
 
     let result = solver.check();
-    println!("Result: {result:?}\n----");
+    println!("Result: {result:?}");
     if let Some(m) = solver.get_model() {
         println!("Model:");
         println!("{m}");
