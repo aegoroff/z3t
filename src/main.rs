@@ -38,35 +38,35 @@ fn zebra_puzzle() {
     let cfg = Config::new();
     let ctx = Context::new(&cfg);
 
-    let yellow = ast::Int::new_const(&ctx, "yellow");
-    let blue = ast::Int::new_const(&ctx, "blue");
-    let red = ast::Int::new_const(&ctx, "red");
-    let ivory = ast::Int::new_const(&ctx, "ivory");
-    let green = ast::Int::new_const(&ctx, "green");
+    let yellow = ast::Int::new_const(&ctx, "Yellow");
+    let blue = ast::Int::new_const(&ctx, "Blue");
+    let red = ast::Int::new_const(&ctx, "Red");
+    let ivory = ast::Int::new_const(&ctx, "Ivory");
+    let green = ast::Int::new_const(&ctx, "Green");
 
-    let norwegian = ast::Int::new_const(&ctx, "norwegian");
-    let ukrainian = ast::Int::new_const(&ctx, "ukrainian");
-    let englishman = ast::Int::new_const(&ctx, "englishman");
-    let spaniard = ast::Int::new_const(&ctx, "spaniard");
-    let japanese = ast::Int::new_const(&ctx, "japanese");
+    let norwegian = ast::Int::new_const(&ctx, "Norwegian");
+    let ukrainian = ast::Int::new_const(&ctx, "Ukrainian");
+    let englishman = ast::Int::new_const(&ctx, "Englishman");
+    let spaniard = ast::Int::new_const(&ctx, "Spaniard");
+    let japanese = ast::Int::new_const(&ctx, "Japanese");
 
-    let water = ast::Int::new_const(&ctx, "water");
-    let milk = ast::Int::new_const(&ctx, "milk");
-    let tea = ast::Int::new_const(&ctx, "tea");
-    let orange_juice = ast::Int::new_const(&ctx, "orange_juice");
-    let coffee = ast::Int::new_const(&ctx, "coffee");
+    let water = ast::Int::new_const(&ctx, "Water");
+    let milk = ast::Int::new_const(&ctx, "Milk");
+    let tea = ast::Int::new_const(&ctx, "Tea");
+    let orange_juice = ast::Int::new_const(&ctx, "OrangeJuice");
+    let coffee = ast::Int::new_const(&ctx, "Coffee");
 
-    let kools = ast::Int::new_const(&ctx, "kools");
-    let chesterfield = ast::Int::new_const(&ctx, "chesterfield");
-    let old_gold = ast::Int::new_const(&ctx, "old_gold");
-    let lucky_strike = ast::Int::new_const(&ctx, "lucky_strike");
-    let parliament = ast::Int::new_const(&ctx, "parliament");
+    let kools = ast::Int::new_const(&ctx, "Kool");
+    let chesterfield = ast::Int::new_const(&ctx, "Chesterfield");
+    let old_gold = ast::Int::new_const(&ctx, "OldGold");
+    let lucky_strike = ast::Int::new_const(&ctx, "LuckyStrike");
+    let parliament = ast::Int::new_const(&ctx, "Parliament");
 
-    let fox = ast::Int::new_const(&ctx, "fox");
-    let horse = ast::Int::new_const(&ctx, "horse");
-    let snails = ast::Int::new_const(&ctx, "snails");
-    let dog = ast::Int::new_const(&ctx, "dog");
-    let zebra = ast::Int::new_const(&ctx, "zebra");
+    let fox = ast::Int::new_const(&ctx, "Fox");
+    let horse = ast::Int::new_const(&ctx, "Horse");
+    let snails = ast::Int::new_const(&ctx, "Snail");
+    let dog = ast::Int::new_const(&ctx, "Dog");
+    let zebra = ast::Int::new_const(&ctx, "Zebra");
 
     let params = vec![
         &norwegian,
