@@ -659,13 +659,26 @@ fn xkcd287() {
     solver.assert(&f.ge(&zero));
     solver.assert(&equation);
 
-    let result = solver.check();
+    while solver.check() == SatResult::Sat {
+        if let Some(m) = solver.get_model() {
+            let mut modifications = Vec::new();
+            m.iter().for_each(|fd| {
+                modifications.push(
+                    fd.apply(&[])
+                        ._eq(&m.get_const_interp(&fd.apply(&[])).unwrap())
+                        .not(),
+                );
+            });
+            solver.assert(&ast::Bool::or(
+                &ctx,
+                &modifications.iter().collect::<Vec<_>>(),
+            ));
 
-    println!("Result: {result:?}");
-    if let Some(m) = solver.get_model() {
-        println!("Model:");
-        println!("{m}");
-    };
+            println!("Model:");
+            println!("{m}");
+        }
+    }
+
 }
 
 fn toy() {
