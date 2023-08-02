@@ -1,5 +1,5 @@
 use comfy_table::presets::UTF8_HORIZONTAL_ONLY;
-use comfy_table::{Attribute, Cell, ContentArrangement, Table};
+use comfy_table::{Attribute, Cell, ContentArrangement, Table, TableComponent};
 use itertools::Itertools;
 use z3::ast::Ast;
 use z3::{ast, Config, Context, Model, Optimize, SatResult, Solver};
@@ -144,6 +144,12 @@ fn feed_kids_puzzle() {
             table
                 .load_preset(UTF8_HORIZONTAL_ONLY)
                 .set_content_arrangement(ContentArrangement::Dynamic)
+                .set_style(TableComponent::BottomBorder, ' ')
+                .set_style(TableComponent::BottomBorderIntersections, ' ')
+                .set_style(TableComponent::TopBorder, ' ')
+                .set_style(TableComponent::TopBorderIntersections, ' ')
+                .set_style(TableComponent::HeaderLines, '-')
+                .set_style(TableComponent::MiddleHeaderIntersections, '-')
                 .set_width(120)
                 .set_header(vec![
                     Cell::new("apple").add_attribute(Attribute::Bold),
@@ -385,6 +391,14 @@ fn zebra_puzzle() {
         let mut table = Table::new();
         table
             .load_preset(UTF8_HORIZONTAL_ONLY)
+            .set_style(TableComponent::BottomBorder, ' ')
+            .set_style(TableComponent::BottomBorderIntersections, ' ')
+            .set_style(TableComponent::TopBorder, ' ')
+            .set_style(TableComponent::TopBorderIntersections, ' ')
+            .set_style(TableComponent::HeaderLines, '-')
+            .set_style(TableComponent::MiddleHeaderIntersections, ' ')
+            .set_style(TableComponent::HorizontalLines, ' ')
+            .set_style(TableComponent::MiddleIntersections, ' ')
             .set_content_arrangement(ContentArrangement::Dynamic)
             .set_width(120)
             .set_header(vec![
@@ -678,7 +692,6 @@ fn xkcd287() {
             println!("{m}");
         }
     }
-
 }
 
 fn toy() {
