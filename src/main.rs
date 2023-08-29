@@ -35,6 +35,7 @@ fn main() {
     multiple_choice_logic_puzzle();
     feed_kids_puzzle();
     popsicles();
+    simple();
 }
 
 fn popsicles() {
@@ -713,6 +714,30 @@ fn toy() {
     solver.assert(&a1);
     solver.assert(&a2);
     solver.assert(&a3);
+
+    let result = solver.check();
+    println!("Result: {result:?}");
+    if let Some(m) = solver.get_model() {
+        println!("Model:");
+        println!("{m}");
+    };
+}
+
+fn simple() {
+    println!("--- {} ---", function!());
+    let cfg = Config::new();
+    let ctx = Context::new(&cfg);
+
+    let zero = ast::Int::from_i64(&ctx, 0);
+    let x = ast::Int::new_const(&ctx, "x");
+    let y = ast::Int::new_const(&ctx, "y");
+
+    let a1 = (2i64 * &x + &y).ge(&ast::Int::from_i64(&ctx, 3));
+
+    let solver = Solver::new(&ctx);
+    solver.assert(&a1);
+    solver.assert(&x.gt(&zero));
+    solver.assert(&y.gt(&zero));
 
     let result = solver.check();
     println!("Result: {result:?}");
