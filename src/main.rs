@@ -36,6 +36,7 @@ fn main() {
     feed_kids_puzzle();
     popsicles();
     simple();
+    linear_congruent_generator();
 }
 
 fn popsicles() {
@@ -738,6 +739,33 @@ fn simple() {
     solver.assert(&a1);
     solver.assert(&x.gt(&zero));
     solver.assert(&y.gt(&zero));
+
+    let result = solver.check();
+    println!("Result: {result:?}");
+    if let Some(m) = solver.get_model() {
+        println!("Model:");
+        println!("{m}");
+    };
+}
+
+fn linear_congruent_generator() {
+    println!("--- {} ---", function!());
+    let cfg = Config::new();
+    let ctx = Context::new(&cfg);
+
+    let a = ast::BV::from_i64(&ctx, 1103515245, 32);
+    let c = ast::BV::from_i64(&ctx, 12345, 32);
+    let sixteen = ast::BV::from_i64(&ctx, 16, 32);
+    let x = ast::BV::new_const(&ctx, "x", 32);
+
+    let a1 =
+        ((((&x * &a) + &c).bvlshr(&sixteen)) & 32767i64)._eq(&ast::BV::from_i64(&ctx, 4583, 32));
+    let a2 = ((((((&x * &a) + &c) * &a) + &c).bvlshr(&sixteen)) & 32767i64)
+        ._eq(&ast::BV::from_i64(&ctx, 16304, 32));
+
+    let solver = Solver::new(&ctx);
+    solver.assert(&a1);
+    solver.assert(&a2);
 
     let result = solver.check();
     println!("Result: {result:?}");
