@@ -705,9 +705,11 @@ fn toy() {
     let triangle = ast::Int::new_const(&ctx, "triangle");
     let square = ast::Int::new_const(&ctx, "square");
 
-    let a1 = (&circle + &circle)._eq(&ast::Int::from_i64(&ctx, 10));
+    let ten = ast::Int::from_i64(&ctx, 10);
+    let a1 = (&circle + &circle)._eq(&ten);
 
-    let a2 = ((&circle * &square) + &square)._eq(&ast::Int::from_i64(&ctx, 12));
+    let twelve = &ast::Int::from_i64(&ctx, 12);
+    let a2 = ((&circle * &square) + &square)._eq(&twelve);
 
     let a3 = ((&circle * &square) - (&triangle * &circle))._eq(&circle);
 
