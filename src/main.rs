@@ -708,7 +708,7 @@ fn toy() {
     let ten = ast::Int::from_i64(&ctx, 10);
     let a1 = (&circle + &circle)._eq(&ten);
 
-    let twelve = &ast::Int::from_i64(&ctx, 12);
+    let twelve = ast::Int::from_i64(&ctx, 12);
     let a2 = ((&circle * &square) + &square)._eq(&twelve);
 
     let a3 = ((&circle * &square) - (&triangle * &circle))._eq(&circle);
