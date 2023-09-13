@@ -80,8 +80,8 @@ fn popsicles_as_smt() {
 (declare-const total Int)
 (declare-const cost Int)
     
-(assert (=(+(* b1popcicle * 1) (* b3popcicle 3) (* b5popcicle 5)) total))
-(assert (=(+(* b1popcicle * 1) (* b3popcicle 2) (* b5popcicle 3)) cost))
+(assert (=(+(* b1popcicle 1) (* b3popcicle 3) (* b5popcicle 5)) total))
+(assert (=(+(* b1popcicle 1) (* b3popcicle 2) (* b5popcicle 3)) cost))
 (assert (= cost 8))
 (assert (>= b1popcicle 0))
 (assert (>= b3popcicle 0))
