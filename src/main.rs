@@ -72,6 +72,9 @@ fn popsicles_as_smt() {
     println!("--- {} ---", function!());
     let cfg = Config::new();
     let ctx = Context::new(&cfg);
+    let box1 = ast::Int::new_const(&ctx, "b1popcicle");
+    let box3 = ast::Int::new_const(&ctx, "b3popcicle");
+    let box5 = ast::Int::new_const(&ctx, "b5popcicle");
 
     let problem = r#"
 (declare-const b1popcicle Int)
@@ -95,8 +98,14 @@ fn popsicles_as_smt() {
     let result = optimizer.check(&[]);
     println!("Result: {result:?}");
     if let Some(m) = optimizer.get_model() {
+        let b1 = m.eval(&box1, true).unwrap().as_i64().unwrap();
+        let b3 = m.eval(&box3, true).unwrap().as_i64().unwrap();
+        let b5 = m.eval(&box5, true).unwrap().as_i64().unwrap();
         println!("Model:");
         println!("{m}");
+        println!("Box1: {b1}");
+        println!("Box3: {b3}");
+        println!("Box5: {b5}");
     };
 }
 
