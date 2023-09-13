@@ -35,6 +35,7 @@ fn main() {
     multiple_choice_logic_puzzle();
     feed_kids_puzzle();
     popsicles();
+    popsicles_as_smt();
     simple();
     linear_congruent_generator();
 }
@@ -62,6 +63,38 @@ fn popsicles() {
     let result = solver.check(&[]);
     println!("Result: {result:?}");
     if let Some(m) = solver.get_model() {
+        println!("Model:");
+        println!("{m}");
+    };
+}
+
+fn popsicles_as_smt() {
+    println!("--- {} ---", function!());
+    let cfg = Config::new();
+    let ctx = Context::new(&cfg);
+
+    let problem = r#"
+(declare-const b1popcicle Int)
+(declare-const b3popcicle Int)
+(declare-const b5popcicle Int)
+(declare-const total Int)
+(declare-const cost Int)
+    
+(assert (=(+(* b1popcicle * 1) (* b3popcicle 3) (* b5popcicle 5)) total))
+(assert (=(+(* b1popcicle * 1) (* b3popcicle 2) (* b5popcicle 3)) cost))
+(assert (= cost 8))
+(assert (>= b1popcicle 0))
+(assert (>= b3popcicle 0))
+(assert (>= b5popcicle 0))
+(maximize total)
+"#;
+
+    let optimizer = Optimize::new(&ctx);
+    optimizer.from_string(problem);
+
+    let result = optimizer.check(&[]);
+    println!("Result: {result:?}");
+    if let Some(m) = optimizer.get_model() {
         println!("Model:");
         println!("{m}");
     };
