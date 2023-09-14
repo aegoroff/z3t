@@ -49,7 +49,6 @@ fn empty_int() {
     let problem = r#"
 (set-logic ALL)
 (declare-const id1 String)
-(assert (not (= id1 "")))
 (assert (not (= (str.to_int id1) 1337)) ) 
 (check-sat)
 "#;
