@@ -38,6 +38,31 @@ fn main() {
     popsicles_as_smt();
     simple();
     linear_congruent_generator();
+    empty_int();
+}
+
+fn empty_int() {
+    println!("--- {} ---", function!());
+    let cfg = Config::new();
+    let ctx = Context::new(&cfg);
+
+    let problem = r#"
+(set-logic ALL)
+(declare-const id1 String)
+(assert (not (= id1 "")))
+(assert (not (= (str.to_int id1) 1337)) ) 
+(check-sat)
+"#;
+
+    let solver = Solver::new(&ctx);
+    solver.from_string(problem);
+
+    let result = solver.check();
+    println!("Result: {result:?}");
+    if let Some(m) = solver.get_model() {
+        println!("Model:");
+        println!("{m}");
+    };
 }
 
 fn popsicles() {
